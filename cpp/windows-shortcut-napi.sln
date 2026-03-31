@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "windows-shortcut-napi", "windows-shortcut-napi.vcxproj", "{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Debug|x64.ActiveCfg = Debug|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Debug|x64.Build.0 = Debug|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Debug|x86.ActiveCfg = Debug|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Debug|x86.Build.0 = Debug|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Release|x64.ActiveCfg = Release|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Release|x64.Build.0 = Release|x64
+		{AE76E1FD-BF8F-47F5-9D5F-BA9A655424FF}.Release|x86.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62D6BE7B-455C-455E-B578-2A2C58A3BE1C}
+	EndGlobalSection
+EndGlobal

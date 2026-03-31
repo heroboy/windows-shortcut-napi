@@ -1,0 +1,45 @@
+{
+  "name": "windows-shortcut-napi",
+  "version": "0.0.9",
+  "description": "Create Windows .lnk shortcuts through N-API with proper Unicode path and argument handling.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "scripts": {
+    "check:release-binding": "node scripts/check-release-binding.js",
+    "prepack": "pnpm run check:release-binding",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "windows",
+    "shortcut",
+    "lnk",
+    "shell-link",
+    "napi",
+    "node-addon",
+    "unicode"
+  ],
+  "author": "",
+  "license": "ISC",
+  "os": [
+    "win32"
+  ],
+  "packageManager": "pnpm@10.33.0",
+  "dependencies": {},
+  "devDependencies": {
+    "node-addon-api": "^8.7.0"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "lib/*"
+  ]
+}

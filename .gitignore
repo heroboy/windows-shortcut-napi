@@ -1,0 +1,39 @@
+node_modules/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment files
+.env
+.env.*
+
+# Test output
+*.lnk
+
+# Native build output
+build/
+Release/
+Debug/
+lib/*.node
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual C++ project output
+cpp/.vs/
+cpp/x64/
+cpp/Debug/
+cpp/Release/
+cpp/windows-*/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
