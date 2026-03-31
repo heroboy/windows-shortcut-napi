@@ -61,7 +61,7 @@ try {
 		target: 'C:/missing/file.exe',
 	});
 } catch (error) {
-	if (error instanceof shortcut.ShortcutCreateError) {
+	if (error instanceof shortcut.ShortcutError) {
 		console.error(error.message);
 		console.error('reason:', error.reason);
 		console.error('status:', error.status);
@@ -90,7 +90,7 @@ Returns:
 Throws:
 
 - `TypeError` when arguments are invalid
-- `ShortcutCreateError` when the native shortcut creation fails
+- `ShortcutError` when the native shortcut creation fails
 
 ### `create(path, options)`
 
@@ -104,13 +104,13 @@ Parameters:
 #### `ShortcutCreateOptions`
 
 - `target: string` - Target file or executable path
-- `args?: string` - Command-line arguments
-- `workingDir?: string` - Working directory
-- `runStyle?: number` - Window show mode
-- `icon?: string` - Icon source path
-- `iconIndex?: number` - Icon resource index
-- `hotkey?: number` - Windows shortcut hotkey value
-- `desc?: string` - Shortcut description
+- `args?: string | null` - Command-line arguments
+- `workingDir?: string | null` - Working directory
+- `runStyle?: number | null` - Window show mode
+- `icon?: string | null` - Icon source path
+- `iconIndex?: number | null` - Icon resource index
+- `hotkey?: number | null` - Windows shortcut hotkey value
+- `desc?: string | null` - Shortcut description
 
 Returns:
 
@@ -119,7 +119,34 @@ Returns:
 Throws:
 
 - `TypeError` when arguments are invalid
-- `ShortcutCreateError` when the native shortcut creation fails
+- `ShortcutError` when the native shortcut creation fails
+
+### `query(path)`
+
+Reads an existing shortcut and returns its configured values.
+
+Parameters:
+
+- `path: string` - Existing `.lnk` file path
+
+Returns:
+
+- `ShortcutInfo`
+
+`ShortcutInfo` fields:
+
+- `target: string`
+- `args: string`
+- `workingDir: string`
+- `icon: string`
+- `iconIndex: number`
+- `hotkey: number`
+- `runStyle: number`
+
+Throws:
+
+- `TypeError` when arguments are invalid
+- `ShortcutError` when the native query call fails
 
 ### Constants
 
@@ -127,7 +154,7 @@ Throws:
 - `SW_SHOWMAXIMIZED` - Show the target window maximized
 - `SW_SHOWMINNOACTIVE` - Minimize the target window without activating it
 
-### `ShortcutCreateError`
+### `ShortcutError`
 
 Error type thrown when the native layer fails to create a shortcut.
 

@@ -15,6 +15,16 @@ shortcut.create(shortcutPath, {
 });
 
 assert.ok(fs.existsSync(shortcutPath), 'Shortcut was not created');
+
+let queryResult = shortcut.query(shortcutPath);
+assert.strictEqual(queryResult.target, path.resolve('C:/Windows/System32/notepad.exe'), 'Queried target does not match expected value');
+assert.strictEqual(queryResult.args, 'C:/temp/example.txt', 'Queried args do not match expected value');
+assert.strictEqual(queryResult.workingDir, 'C:/temp', 'Queried workingDir does not match expected value');
+assert.strictEqual(queryResult.icon, 'C:/Windows/System32/shell32.dll', 'Queried icon does not match expected value');
+assert.strictEqual(queryResult.iconIndex, 0, 'Queried iconIndex does not match expected value');
+assert.strictEqual(queryResult.hotkey, 0, 'Queried hotkey does not match expected value');
+assert.strictEqual(queryResult.runStyle, shortcut.SW_SHOWNORMAL, 'Queried runStyle does not match expected value');
+
 fs.unlinkSync(shortcutPath);
 
 shortcut.create(shortcutPath, {
@@ -29,6 +39,8 @@ shortcut.create(shortcutPath, {
 });
 
 assert.ok(fs.existsSync(shortcutPath), 'Shortcut with nullable options was not created');
+queryResult = shortcut.query(shortcutPath);
+assert.strictEqual(queryResult.args, '');
 fs.unlinkSync(shortcutPath);
 
 assert.throws(
@@ -48,6 +60,10 @@ assert.throws(
 
 assert.throws(
 	() => shortcut.create('a.lnk', 'C:/Windows/System32/notepad.exe'),
-	shortcut.ShortcutCreateError
+	shortcut.ShortcutError
 );
 
+assert.throws(
+	() => shortcut.query('a.lnk'),
+	shortcut.ShortcutError
+);

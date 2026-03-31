@@ -23,11 +23,51 @@ declare namespace windowsShortcutNapi {
 		| typeof SW_SHOWMINNOACTIVE;
 
 	/**
+	 * Data returned by `query` for an existing shortcut.
+	 */
+	interface ShortcutInfo {
+		/**
+		 * Resolved path to the shortcut target.
+		 */
+		target: string;
+
+		/**
+		 * Command-line arguments configured in the shortcut.
+		 */
+		args: string;
+
+		/**
+		 * Working directory configured in the shortcut.
+		 */
+		workingDir: string;
+
+		/**
+		 * Icon source path configured in the shortcut.
+		 */
+		icon: string;
+
+		/**
+		 * Icon resource index configured in the shortcut.
+		 */
+		iconIndex: number;
+
+		/**
+		 * Windows shortcut hotkey value.
+		 */
+		hotkey: number;
+
+		/**
+		 * Window show command configured in the shortcut.
+		 */
+		runStyle: number;
+	}
+
+	/**
 	 * Options used to create a Windows shortcut.
 	 */
 	interface ShortcutCreateOptions {
 		/**
-		 * Absolute or relative path to the shortcut target.
+		 * Absolute path to the shortcut target.
 		 */
 		target: string;
 
@@ -70,7 +110,7 @@ declare namespace windowsShortcutNapi {
 	/**
 	 * Error thrown when shortcut creation fails in the wrapped native layer.
 	 */
-	class ShortcutCreateError extends Error {
+	class ShortcutError extends Error {
 		/**
 		 * Native error reason returned by the addon.
 		 */
@@ -104,6 +144,13 @@ declare namespace windowsShortcutNapi {
 	 * @param targetOrOptions Shortcut creation options.
 	 */
 	function create(path: string, targetOrOptions: ShortcutCreateOptions): void;
+
+	/**
+	 * Reads an existing shortcut and returns its configured properties.
+	 *
+	 * @param path Existing `.lnk` file path.
+	 */
+	function query(path: string): ShortcutInfo;
 }
 
 export = windowsShortcutNapi;

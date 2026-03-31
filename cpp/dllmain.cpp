@@ -26,6 +26,12 @@ Napi::Value ReturnError(Napi::Env env, int status, HRESULT hr, const wchar_t* re
 	return obj;
 }
 
+struct ComInit
+{
+	HRESULT hr;
+	ComInit() { hr = CoInitializeEx(NULL, COINIT_MULTITHREADED); }
+	~ComInit() { CoUninitialize(); }
+};
 
 Napi::Value CreateShortcut(const Napi::CallbackInfo& info)
 {
@@ -58,16 +64,12 @@ Napi::Value CreateShortcut(const Napi::CallbackInfo& info)
 	};
 
 	HRESULT hr;
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	ComInit com;
+	hr = com.hr;
 	if (FAILED(hr))
 	{
 		return ReturnError(env, -1, hr, L"CoInitializeEx failed");
 	}
-
-	struct _OutOfScope
-	{
-		~_OutOfScope() { CoUninitialize(); }
-	} _MyOut;
 
 	CComPtr<IShellLink> pShellLink;
 	hr = pShellLink.CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER);
@@ -136,7 +138,7 @@ Napi::Value CreateShortcut(const Napi::CallbackInfo& info)
 			return ReturnError(env, -3, hr, L"SetHotkey failed");
 		}
 	}
-	
+
 	if (HasArg(8))
 	{
 		auto description = info[8].As<Napi::String>().Utf16Value();
@@ -160,14 +162,102 @@ Napi::Value CreateShortcut(const Napi::CallbackInfo& info)
 		return ReturnError(env, -5, hr, L"Save failed");
 	}
 
-
-
 	return Napi::Value();
 }
 
+Napi::Value QueryShortcut(const Napi::CallbackInfo& info)
+{
+	Napi::Env env = info.Env();
+
+	std::u16string target = info[0].As<Napi::String>().Utf16Value();
+	HRESULT hr;
+	ComInit com;
+	hr = com.hr;
+	if (FAILED(hr))
+	{
+		return ReturnError(env, -1, hr, L"CoInitializeEx failed");
+	}
+
+	CComPtr<IShellLink> pShellLink;
+	hr = pShellLink.CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER);
+	if (FAILED(hr))
+	{
+		return ReturnError(env, -2, hr, L"CoCreateInstance failed");
+	}
+
+	CComPtr<IPersistFile> pPersistFile;
+	hr = pShellLink.QueryInterface(&pPersistFile);
+	if (FAILED(hr))
+	{
+		return ReturnError(env, -3, hr, L"QueryInterface failed");
+	}
+
+	hr = pPersistFile->Load((LPCWSTR)target.c_str(), STGM_READ);
+	if (FAILED(hr))
+	{
+		return ReturnError(env, -4, hr, L"Load failed");
+	}
+
+	Napi::Object obj = Napi::Object::New(env);
+
+	wchar_t strbuf[MAX_PATH * 4];
+
+	hr = pShellLink->GetPath(strbuf, ARRAYSIZE(strbuf), NULL, SLGP_RAWPATH);
+	if (SUCCEEDED(hr))
+	{
+		obj["target"] = Napi::String::New(env, (const char16_t*)strbuf);
+	}
+	//todo:  use IPropertyStore (using the PKEY_Link_Arguments value)
+	hr = pShellLink->GetArguments(strbuf, ARRAYSIZE(strbuf));
+	if (SUCCEEDED(hr))
+	{
+		obj["args"] = Napi::String::New(env, (const char16_t*)strbuf);
+	}
+
+	hr = pShellLink->GetWorkingDirectory(strbuf, ARRAYSIZE(strbuf));
+	if (SUCCEEDED(hr))
+	{
+		obj["workingDir"] = Napi::String::New(env, (const char16_t*)strbuf);
+	}
+	int iconIndex;
+	hr = pShellLink->GetIconLocation(strbuf, ARRAYSIZE(strbuf), &iconIndex);
+	if (SUCCEEDED(hr))
+	{
+		obj["icon"] = Napi::String::New(env, (const char16_t*)strbuf);
+		obj["iconIndex"] = iconIndex;
+	}
+
+	WORD hotkey;
+	hr = pShellLink->GetHotkey(&hotkey);
+	if (SUCCEEDED(hr))
+	{
+		obj["hotkey"] = hotkey;
+	}
+
+	int showCmd;
+	hr = pShellLink->GetShowCmd(&showCmd);
+
+	if (SUCCEEDED(hr))
+	{
+		obj["runStyle"] = showCmd;
+	}
+
+	hr = pShellLink->GetDescription(strbuf, ARRAYSIZE(strbuf));
+	if (SUCCEEDED(hr))
+	{
+		obj["desc"] = Napi::String::New(env, (const char16_t*)strbuf);
+	}
+
+	Napi::Object result = Napi::Object::New(env);
+	result["status"] = 0;
+	result["data"] = obj;
+
+	return result;
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-	exports.Set(Napi::String::New(env, "CreateShortcut"),
-		Napi::Function::New(env, CreateShortcut));
+	exports.Set(Napi::String::New(env, "CreateShortcut"), Napi::Function::New(env, CreateShortcut));
+	exports.Set(Napi::String::New(env, "QueryShortcut"), Napi::Function::New(env, QueryShortcut));
 	return exports;
 }
 
