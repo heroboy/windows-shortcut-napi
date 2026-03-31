@@ -5,6 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "type": "commonjs",
+  "homepage": "https://www.npmjs.com/package/windows-shortcuts",
   "exports": {
     ".": {
       "types": "./index.d.ts",

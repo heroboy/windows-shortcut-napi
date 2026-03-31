@@ -2,7 +2,7 @@
 
 Create Windows `.lnk` shortcuts from Node.js through N-API.
 
-This package is intended for the same use case as `windows-shortcuts`, but it uses a native addon instead of spawning a shell process. That avoids the common ANSI code page limitation when passing non-ASCII paths or arguments through the console.
+This package is intended for the same use case as [windows-shortcuts](https://www.npmjs.com/package/windows-shortcuts), but it uses a native addon instead of spawning a shell process. That avoids the common ANSI code page limitation when passing non-ASCII paths or arguments through the console.
 
 ## Features
 
