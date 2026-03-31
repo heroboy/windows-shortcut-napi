@@ -6,6 +6,10 @@
   "types": "index.d.ts",
   "type": "commonjs",
   "homepage": "https://www.npmjs.com/package/windows-shortcuts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroboy/windows-shortcut-napi.git"
+  },
   "exports": {
     ".": {
       "types": "./index.d.ts",
