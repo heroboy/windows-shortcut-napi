@@ -12,21 +12,21 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # 需要至少 2 个提交，后续才能比较 HEAD 与 HEAD^
           fetch-depth: 2
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          # 使用固定 Node 版本，避免环境差异
-          node-version: 20
+          # 使用 Node 24，与 GitHub Actions 新默认运行时保持一致
+          node-version: 24
           # 配置 npm 官方仓库地址，供 npm publish 使用
           registry-url: https://registry.npmjs.org/
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           # 与 packageManager 中声明的 pnpm 版本保持一致
           version: 10.33.0
