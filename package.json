@@ -1,6 +1,6 @@
 {
   "name": "windows-shortcut-napi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create Windows .lnk shortcuts through N-API with proper Unicode path and argument handling.",
   "main": "index.js",
   "types": "index.d.ts",
