@@ -17,7 +17,8 @@ yarn-error.log*
 build/
 Release/
 Debug/
-lib/*.node
+# 保留 npm 发布所需的预编译二进制
+!lib/bindings.node
 
 # Visual Studio
 .vs/
